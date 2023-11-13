@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Medellín Clima y Mapa</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/styles.css') }}"
+    />
+  </head>
+  <body>
+    <div id="banner">
+      <img
+        class="banner-icons"
+        src="{{ url_for('static', filename='images/icon0.png') }}"
+        alt="icono"
+      />
+      <h1>PaisaWheater</h1>
+      <img
+        class="banner-icons"
+        src="{{ url_for('static', filename='images/icon1.png') }}"
+        alt="icono"
+      />
+    </div>
+    <div id="map-weather-container">
+      <div id="weather"></div>
+      <script>
+        fetch("/weather")
+          .then((response) => response.json())
+          .then((data) => {
+            var weatherDiv = document.getElementById("weather");
+            weatherDiv.innerHTML = `
+                          <div id="weather-icon">
+                              <img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png" alt="icono">
+                          <div class="weather-item"><strong>Ciudad:</strong> ${data.name}, ${data.sys.country}</div>
+                          <div class="weather-item"><strong>Temperatura:</strong> ${data.main.temp}°C</div>
+                          <div class="weather-item"><strong>Sensación térmica:</strong> ${data.main.feels_like}°C</div>
+                          <div class="weather-item"><strong>Humedad:</strong> ${data.main.humidity}%</div>
+                          <div class="weather-item"><strong>Presión:</strong> ${data.main.pressure} hPa</div>
+                          <div class="weather-item"><strong>Descripción del clima:</strong> ${data.weather[0].description}</div>
+                      `;
+          });
+      </script>
+      <div id="map"></div>
+      <script src="https://openlayers.org/en/v6.9.0/build/ol.js"></script>
+      <script>
+        var map = new ol.Map({
+          target: "map",
+          layers: [
+            new ol.layer.Tile({
+              source: new ol.source.OSM(),
+            }),
+          ],
+          view: new ol.View({
+            center: ol.proj.fromLonLat([-75.5636, 6.2476]),
+            zoom: 11.3,
+          }),
+        });
+      </script>
+    </div>
+  </body>
+</html>
