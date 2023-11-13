@@ -1,4 +1,37 @@
+version: '3.8'
+services:
+  weather:
+    build:
+      context: .
+      dockerfile: Dockerfile.weather
+    environment:
+      - API_KEY=${API_KEY}
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.2
+        aliases:
+          - weather
+    ports:
+      - "5000:5000"
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.3
+        aliases:
+          - web
+    ports:
+      - "8080:8080"
+    depends_on:
+      - weather
 
+networks:
+  mynetwork:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
 
 
 
