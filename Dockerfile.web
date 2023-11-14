@@ -14,7 +14,7 @@ COPY templates ./templates
 COPY web_service.py .
 
 # Exponer el puerto en el que se ejecutará la aplicación
-EXPOSE 8080
+EXPOSE 80
 
 # Comando para ejecutar la aplicación
 CMD [ "python", "web_service.py" ]
